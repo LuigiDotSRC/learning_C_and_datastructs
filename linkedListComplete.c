@@ -127,6 +127,26 @@ struct node* getNode(struct node* head, int index){
     return NULL; 
 }
 
+struct node* reverseList(struct node* head){
+    // given the list of the linkedlist, reverse the linkedlist and return the head 
+    
+    struct node* list_pointer = head; 
+    struct node* previous_node = NULL; 
+    struct node* next_node; 
+    
+    while(list_pointer != NULL){
+        next_node = list_pointer->link;
+        list_pointer->link = previous_node;
+        
+        if(next_node == NULL){
+            return list_pointer; // where list_pointer is the head 
+        }
+        
+        previous_node = list_pointer; 
+        list_pointer = next_node; 
+    }
+}
+
 
 
 int main()
@@ -146,5 +166,8 @@ int main()
     int target_index = 4;
     printf("The node at index: %d holds the data: %d",target_index,getNode(head,target_index)->data); 
     
+    printf("\n---------------------\nReverse:\n");
+    struct node* new_head = reverseList(head);
+    printAllNodes(new_head);
     return 0;
 }
