@@ -44,6 +44,11 @@ void addElement(struct node* head, int data, int index){
     // given the index position, place the data in the given node position
     // SC1: if there is an existing node, displace it to the right by 1 index (cutoff previous node link and new node will link to displaced node)
     // SC2: if the index is 0, do nothing since the head should not be changed 
+    // SC3: if index is out of range, do nothing 
+    
+    if(index == 0){
+        return;
+    }
     
     int counter = 0; 
     struct node* previous_node = head; 
@@ -55,6 +60,7 @@ void addElement(struct node* head, int data, int index){
             new_node->data = data; 
             new_node->link = old_node; 
             previous_node->link = new_node; 
+            break; 
         }
         counter++; 
         previous_node = head; 
@@ -62,6 +68,66 @@ void addElement(struct node* head, int data, int index){
     }
     
 }
+
+void deleteElement(struct node* head, int index){
+    // given the index of the node, delete the node from the linkedList
+    // SC1: if there is an existing node, previous node link must be updated to existing node link  
+    // SC2: if the index is 0, do nothing since the head should not be changed 
+    // SC3: if index is out of range, do nothing 
+    
+    if(index == 0){
+        return; 
+    }
+    
+    struct node* previous_node = head; 
+    int counter = 0; 
+    
+    while(head != NULL){
+        if(counter == index){
+            previous_node->link = head->link;
+            break; 
+        }
+        counter++;
+        previous_node = head; 
+        head = head->link;
+    }
+    
+    if(head == NULL){
+        free(head);
+    }
+    
+}
+
+void appendNode(struct node* head, int data){
+    // append the new node to the end of the linkedlist 
+    while(head != NULL){
+        if(head->link == NULL){
+            struct node* new_node = (struct node*)malloc(sizeof(struct node));
+            new_node->data = data; 
+            new_node->link = NULL; 
+            head->link = new_node; 
+            break; 
+        }
+        head = head->link; 
+    }
+}
+
+struct node* getNode(struct node* head, int index){
+    // given index return the pointer of the specified node 
+    
+    int counter = 0; 
+    while(head != NULL){
+        if(counter == index){
+            return head; 
+        }
+        head = head->link; 
+        counter++; 
+    }
+    
+    return NULL; 
+}
+
+
 
 int main()
 {
@@ -71,9 +137,14 @@ int main()
     struct node* head = createLinkedList(numbers, numbers_size); 
     printAllNodes(head); 
     
-    addElement(head, 420, 2); 
+    addElement(head, 420, 1); 
+    deleteElement(head, 4);
+    appendNode(head, 123);
     printf("\n---------------------\n");
     printAllNodes(head);
+    
+    int target_index = 4;
+    printf("The node at index: %d holds the data: %d",target_index,getNode(head,target_index)->data); 
     
     return 0;
 }
